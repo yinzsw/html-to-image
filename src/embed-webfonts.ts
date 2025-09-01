@@ -115,7 +115,11 @@ async function getCSSRules(
         toArray<CSSRule>(sheet.cssRules || []).forEach((item, index) => {
           if (item.type === CSSRule.IMPORT_RULE) {
             let importIndex = index + 1
-            const url = (item as CSSImportRule).href
+            const parentHref = (item as CSSImportRule)?.parentStyleSheet?.href
+            const importHref = (item as CSSImportRule).href
+            const url = parentHref
+              ? new URL(importHref, parentHref).href
+              : importHref
             const deferred = fetchCSS(url)
               .then((metadata) => embedFonts(metadata, options))
               .then((cssText) =>
