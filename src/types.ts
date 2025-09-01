@@ -30,6 +30,10 @@ export interface Options {
    */
   includeStyleProperties?: string[]
   /**
+   *  Whether to include CSS rules from `@import` statements when rendering the node.
+   */
+  includeImportsStyle?: boolean
+  /**
    * A function taking DOM node as argument. Should return `true` if passed
    * node should be included in the output. Excluding node means excluding
    * it's children as well.

@@ -113,7 +113,10 @@ async function getCSSRules(
     if ('cssRules' in sheet) {
       try {
         toArray<CSSRule>(sheet.cssRules || []).forEach((item, index) => {
-          if (item.type === CSSRule.IMPORT_RULE) {
+          if (
+            item.type === CSSRule.IMPORT_RULE &&
+            options.includeImportsStyle
+          ) {
             let importIndex = index + 1
             const parentHref = (item as CSSImportRule)?.parentStyleSheet?.href
             const importHref = (item as CSSImportRule).href
@@ -212,6 +215,7 @@ function normalizeFontFamily(font: string) {
 
 function getUsedFonts(node: HTMLElement) {
   const fonts = new Set<string>()
+
   function traverse(node: HTMLElement) {
     const fontFamily =
       node.style.fontFamily || getComputedStyle(node).fontFamily
@@ -225,6 +229,7 @@ function getUsedFonts(node: HTMLElement) {
       }
     })
   }
+
   traverse(node)
   return fonts
 }
